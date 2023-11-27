@@ -1,11 +1,9 @@
-package keylock_test
+package keylock
 
 import (
 	"sync"
 	"testing"
 	"time"
-
-	"github.com/pomo-mondreganto/mongol/pkg/keylock"
 
 	"github.com/stretchr/testify/require"
 	"go.uber.org/goleak"
@@ -23,7 +21,7 @@ func timeout(d time.Duration) <-chan struct{} {
 func TestKeyLock_Simple(t *testing.T) {
 	defer goleak.VerifyNone(t)
 
-	l := keylock.New()
+	l := New()
 
 	canceled, unlock := l.LockKeys([]string{"a", "b"}, nil)
 	require.False(t, canceled)
@@ -39,7 +37,7 @@ func TestKeyLock_Simple(t *testing.T) {
 
 func TestKeyLock_Progress(t *testing.T) {
 	defer goleak.VerifyNone(t)
-	l := keylock.New()
+	l := New()
 
 	canceled, unlock := l.LockKeys([]string{"a", "b"}, nil)
 	require.False(t, canceled)
@@ -58,7 +56,7 @@ func TestKeyLock_DeadlockFree(t *testing.T) {
 	const N = 10000
 
 	defer goleak.VerifyNone(t)
-	l := keylock.New()
+	l := New()
 
 	var wg sync.WaitGroup
 	wg.Add(3)
@@ -85,7 +83,7 @@ func TestKeyLock_DeadlockFree(t *testing.T) {
 
 func TestKeyLock_NoMutates(t *testing.T) {
 	defer goleak.VerifyNone(t)
-	l := keylock.New()
+	l := New()
 
 	keys := []string{"b", "c", "a"}
 	passedKeys := make([]string, len(keys))
@@ -104,7 +102,7 @@ func TestKeyLock_SingleKeyStress(t *testing.T) {
 	)
 
 	defer goleak.VerifyNone(t)
-	l := keylock.New()
+	l := New()
 
 	var wg sync.WaitGroup
 	wg.Add(G)
