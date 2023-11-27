@@ -1,4 +1,4 @@
-module github.com/C4T-BuT-S4D/cbs-go
+module github.com/c4t-but-s4d/cbs-go
 
 go 1.21
 
